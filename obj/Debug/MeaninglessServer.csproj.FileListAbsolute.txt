@@ -1,0 +1,8 @@
+G:\Dev\MeaninglessServer\MeaninglessServer\bin\Debug\MeaninglessServer.exe
+G:\Dev\MeaninglessServer\MeaninglessServer\bin\Debug\MeaninglessServer.pdb
+G:\Dev\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csprojResolveAssemblyReference.cache
+G:\Dev\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csproj.CoreCompileInputs.cache
+G:\Dev\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.exe
+G:\Dev\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.pdb
+G:\Dev\MeaninglessServer\MeaninglessServer\bin\Debug\Newtonsoft.Json.dll
+G:\Dev\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csproj.CopyComplete
