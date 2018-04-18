@@ -397,6 +397,11 @@ namespace MeaninglessServer
             {
                 return false;
             }
+            if(playerDict.Count<2)
+            {
+                Console.WriteLine("");
+                return false;
+            }
             return true;
         }
 

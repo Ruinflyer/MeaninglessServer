@@ -11,12 +11,14 @@ namespace MeaninglessServer
         {
             BytesProtocol protocol = new BytesProtocol();
             protocol.SpliceString("RequestStartGame");
+            /*
             if (!player.playerStatus.room.CanStart())
             {
                 protocol.SpliceInt(-1);
                 player.Send(protocol);
                 return;
             }
+            */
             protocol.SpliceInt(0);
             player.Send(protocol);
             player.playerStatus.room.StartGame();
@@ -43,17 +45,12 @@ namespace MeaninglessServer
         /// </summary>
         public void MsgPlayerReady(Player player, BaseProtocol baseProtocol)
         {
-            //玩家不在游戏状态，返回
-            if (player.playerStatus.status != PlayerStatus.Status.Gaming)
-            {
-                return;
-            }
+            
             int startIndex = 0;
             BytesProtocol p = (BytesProtocol)baseProtocol;
             p.GetString(startIndex, ref startIndex);
             string playerName = p.GetString(startIndex, ref startIndex);
-            int playerstatus = p.GetInt(startIndex, ref startIndex);
-
+            //int playerstatus = p.GetInt(startIndex, ref startIndex);
             Room room = player.playerStatus.room;
             if (room.playerReadyDict.Count < room.playerDict.Count)
             {
@@ -316,6 +313,31 @@ namespace MeaninglessServer
 
             RoomManager.instance.LeaveRoom(player);
 
+        }
+
+       /// <summary>
+       /// 房间门打开转发
+       /// </summary>
+       /// <param name="player"></param>
+       /// <param name="baseProtocol"></param>
+        public void MsgDoorOpen(Player player, BaseProtocol baseProtocol)
+        {
+            //玩家胜利
+            //消息结构: (string)PlayerSuccess
+            if (player.playerStatus.status != PlayerStatus.Status.Gaming)
+            {
+                return;
+            }
+            Room room = player.playerStatus.room;
+            int startIndex = 0;
+            BytesProtocol p = (BytesProtocol)baseProtocol;
+            p.GetString(startIndex, ref startIndex);
+            int DoorID = p.GetInt(startIndex, ref startIndex);
+
+            BytesProtocol doorProtocol = new BytesProtocol();
+            doorProtocol.SpliceString("DoorOpen");
+            doorProtocol.SpliceInt(DoorID);
+            room.Broadcast(doorProtocol);
         }
 
        
