@@ -95,6 +95,7 @@ namespace MeaninglessServer
             int HeadItem = p.GetInt(startIndex, ref startIndex);
             int BodyItem = p.GetInt(startIndex, ref startIndex);
             int WeaponID = p.GetInt(startIndex, ref startIndex);
+            int ActionLayer = p.GetInt(startIndex, ref startIndex);
             string CurrentAction = p.GetString(startIndex, ref startIndex);
 
             player.playerStatus.HP = HP;
@@ -104,6 +105,7 @@ namespace MeaninglessServer
             player.playerStatus.HeadItemID = HeadItem;
             player.playerStatus.BodyItemID = BodyItem;
             player.playerStatus.WeaponID = WeaponID;
+            player.playerStatus.ActionLayer = ActionLayer;
             player.playerStatus.CurrentAction = CurrentAction;
             player.playerStatus.LastUpdateTime = Utility.GetTimeStamp();
 
@@ -119,6 +121,7 @@ namespace MeaninglessServer
             protocolReturn.SpliceInt(HeadItem);
             protocolReturn.SpliceInt(BodyItem);
             protocolReturn.SpliceInt(WeaponID);
+            protocolReturn.SpliceInt(ActionLayer);
             protocolReturn.SpliceString(CurrentAction);
             player.playerStatus.room.Broadcast(protocolReturn);
         }

@@ -28,6 +28,7 @@ namespace MeaninglessServer
         public int HeadItemID;
         public int BodyItemID;
         public int WeaponID;
+        public int ActionLayer;
         public string CurrentAction;
 
         public long LastUpdateTime;
