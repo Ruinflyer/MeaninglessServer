@@ -132,10 +132,7 @@ namespace MeaninglessServer
             //消息结构:(string)PlayerHitSomeone + (string)PlayerName + (float)Damage
 
             //玩家不在游戏状态，当没事发生
-            if (player.playerStatus.status != PlayerStatus.Status.Gaming)
-            {
-                return;
-            }
+          
             Room room = player.playerStatus.room;
 
 
