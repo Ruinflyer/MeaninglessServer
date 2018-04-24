@@ -7,6 +7,9 @@ namespace MeaninglessServer
 {
     public partial class handlePlayerMsg
     {
+
+        private int randomItemCode=0;
+
         public void MsgRequestStartGame(Player player, BaseProtocol baseProtocol)
         {
             BytesProtocol protocol = new BytesProtocol();
@@ -37,7 +40,22 @@ namespace MeaninglessServer
         /// </summary>
         public void MsgGetMapItemData(Player player, BaseProtocol baseProtocol)
         {
-            player.Send(player.playerStatus.room.ItemsProtocol);
+            int startIndex = 0;
+            BytesProtocol protocol = (BytesProtocol)baseProtocol;
+            protocol.GetString(startIndex, ref startIndex);
+
+            Random ran = new Random();
+            if (randomItemCode==0)
+            {
+                randomItemCode = ran.Next(1, 999);
+            }
+            Console.WriteLine("RandomItemCode Set: "+randomItemCode.ToString());
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("GetMapItemData");
+            p.SpliceInt(randomItemCode);
+            player.playerStatus.room.Broadcast(p);
+
+            //player.Send(player.playerStatus.room.ItemsProtocol);
         }
 
         /// <summary>
