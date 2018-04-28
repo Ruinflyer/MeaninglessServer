@@ -142,10 +142,11 @@ namespace MeaninglessServer
             //(int)playerNum PlayerInfo...
             BytesProtocol protocol = new BytesProtocol();
             protocol.SpliceString("GetRoomInfo");
-
+            //玩家数量
             protocol.SpliceInt(playerDict.Count);
             foreach (Player player in playerDict.Values)
             {
+                //玩家名
                 protocol.SpliceString(player.name);
                 //是房主则返回1 不是则返回0
                 if (player.playerStatus.isMaster)

@@ -14,6 +14,8 @@ namespace MeaninglessServer
             InRoom,
             Gaming
         }
+
+    
         //所属房间
         public Room room;
         //当前状态
@@ -31,11 +33,19 @@ namespace MeaninglessServer
         public int ActionLayer;
         public string CurrentAction;
 
+        /**BuffType:
+         *  Freeze,
+            SlowDown,
+            Blind,
+         * **/
+        public int buffType;
+        public float buffTime;
         public long LastUpdateTime;
         public PlayerStatus()
         {
 
         }
 
+      
     }
 }

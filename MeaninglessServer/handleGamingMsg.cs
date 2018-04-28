@@ -41,10 +41,11 @@ namespace MeaninglessServer
         public void MsgGetMapItemData(Player player, BaseProtocol baseProtocol)
         {
             int startIndex = 0;
-            BytesProtocol protocol = (BytesProtocol)baseProtocol;
+            BytesProtocol protocol = baseProtocol as BytesProtocol;
             protocol.GetString(startIndex, ref startIndex);
 
-            Random ran = new Random();
+            Random ran = new Random((int)Utility.GetTimeStamp());
+            
             if (randomItemCode==0)
             {
                 randomItemCode = ran.Next(1, 999);
@@ -65,11 +66,22 @@ namespace MeaninglessServer
         {
             
             int startIndex = 0;
-            BytesProtocol p = (BytesProtocol)baseProtocol;
+            BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
             string playerName = p.GetString(startIndex, ref startIndex);
             //int playerstatus = p.GetInt(startIndex, ref startIndex);
             Room room = player.playerStatus.room;
+
+            //测试单人使用
+            if(room.playerDict.Count==1)
+            {
+                BytesProtocol protocol = new BytesProtocol();
+                protocol.SpliceString("AllPlayerLoaded");
+                room.Broadcast(protocol);
+                room.beginTimer = true;
+                room.LastCirclefieldTime = Utility.GetTimeStamp();
+                return;
+            }
             if (room.playerReadyDict.Count < room.playerDict.Count)
             {
                 lock (room.playerReadyDict)
@@ -100,7 +112,7 @@ namespace MeaninglessServer
             {
                 return;
             }
-            BytesProtocol p = (BytesProtocol)baseProtocol;
+            BytesProtocol p = baseProtocol as BytesProtocol;
             int startIndex = 0;
             p.GetString(startIndex, ref startIndex);
             float HP = p.GetFloat(startIndex, ref startIndex);
@@ -159,7 +171,7 @@ namespace MeaninglessServer
 
 
             int startIndex = 0;
-            BytesProtocol p = (BytesProtocol)baseProtocol;
+            BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
             string HitplayerName = p.GetString(startIndex, ref startIndex);
             float Damage = p.GetFloat(startIndex, ref startIndex);
@@ -210,7 +222,7 @@ namespace MeaninglessServer
 
 
             int startIndex = 0;
-            BytesProtocol p = (BytesProtocol)baseProtocol;
+            BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
 
 
@@ -253,7 +265,7 @@ namespace MeaninglessServer
             Room room = player.playerStatus.room;
 
             int startIndex = 0;
-            BytesProtocol p = (BytesProtocol)baseProtocol;
+            BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
             string playerName = p.GetString(startIndex, ref startIndex);
             int magicItemID = p.GetInt(startIndex, ref startIndex);
@@ -292,7 +304,7 @@ namespace MeaninglessServer
             Room room = player.playerStatus.room;
 
             int startIndex = 0;
-            BytesProtocol p = (BytesProtocol)baseProtocol;
+            BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
             string playerName = p.GetString(startIndex, ref startIndex);
             int magicItemID = p.GetInt(startIndex, ref startIndex);
@@ -325,7 +337,7 @@ namespace MeaninglessServer
             Room room = player.playerStatus.room;
 
             int startIndex = 0;
-            BytesProtocol p = (BytesProtocol)baseProtocol;
+            BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
 
 
@@ -348,7 +360,7 @@ namespace MeaninglessServer
             }
             Room room = player.playerStatus.room;
             int startIndex = 0;
-            BytesProtocol p = (BytesProtocol)baseProtocol;
+            BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
             int DoorID = p.GetInt(startIndex, ref startIndex);
 
@@ -366,7 +378,7 @@ namespace MeaninglessServer
         {
             //消息结构: (string)GetPlayersInfo + (int)PlayerNum +(string)PlayerName1 + ... +(string)PlayerName#
             int startIndex = 0;
-            BytesProtocol get = (BytesProtocol)baseProtocol;
+            BytesProtocol get = baseProtocol as BytesProtocol;
             get.GetString(startIndex, ref startIndex);
             Room room = player.playerStatus.room;
 
@@ -374,6 +386,39 @@ namespace MeaninglessServer
             p.SpliceString("GetPlayersInfo");
             p.SpliceInt(room.playerDict.Count);
             foreach(Player pr in room.playerDict.Values)
+            {
+                p.SpliceString(pr.name);
+            }
+            player.Send(p);
+        }
+
+        /// <summary>
+        /// 玩家获得有害状态，转发
+        /// </summary>
+        public void MsgPlayerGetBuff(Player player, BaseProtocol baseProtocol)
+        {
+            //消息结构: (string)PlayerName + (int)BuffType +(float)buffTime 
+            int startIndex = 0;
+            BytesProtocol get = baseProtocol as BytesProtocol;
+            Room room = player.playerStatus.room;
+            get.GetString(startIndex, ref startIndex);
+            string PlayerName =get.GetString(startIndex, ref startIndex);
+            int bufftype= get.GetInt(startIndex, ref startIndex);
+            float bufftime= get.GetFloat(startIndex, ref startIndex);
+            if (room.playerDict.ContainsKey(PlayerName))
+            {
+                room.playerDict[PlayerName].playerStatus.buffType = bufftype;
+                room.playerDict[PlayerName].playerStatus.buffTime = bufftime;
+            }
+           
+            
+
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("PlayerGetBuff");
+            p.SpliceString(PlayerName);
+            p.SpliceInt(bufftype);
+            p.SpliceFloat(bufftime);
+            foreach (Player pr in room.playerDict.Values)
             {
                 p.SpliceString(pr.name);
             }

@@ -33,7 +33,7 @@ namespace MeaninglessServer
         public void MsgJoinRoom(Player player, BaseProtocol baseProtocol)
         {
             int startIndex = 0;
-            BytesProtocol Protocol = (BytesProtocol)baseProtocol;
+            BytesProtocol Protocol = baseProtocol as BytesProtocol;
             string methodName = Protocol.GetString(startIndex, ref startIndex);
             int RoomIndex = Protocol.GetInt(startIndex, ref startIndex);
             Console.WriteLine("[客户端 " + player.name + " ]" + "请求加入房间(MsgJoinRoom)：index：" + RoomIndex);
