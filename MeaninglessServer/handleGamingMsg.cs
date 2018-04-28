@@ -359,5 +359,25 @@ namespace MeaninglessServer
         }
 
        
+        /// <summary>
+        /// 获取房间玩家信息
+        /// </summary>
+        public void MsgGetPlayersInfo(Player player, BaseProtocol baseProtocol)
+        {
+            //消息结构: (string)GetPlayersInfo + (int)PlayerNum +(string)PlayerName1 + ... +(string)PlayerName#
+            int startIndex = 0;
+            BytesProtocol get = (BytesProtocol)baseProtocol;
+            get.GetString(startIndex, ref startIndex);
+            Room room = player.playerStatus.room;
+
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("GetPlayersInfo");
+            p.SpliceInt(room.playerDict.Count);
+            foreach(Player pr in room.playerDict.Values)
+            {
+                p.SpliceString(pr.name);
+            }
+            player.Send(p);
+        }
     }
 }
