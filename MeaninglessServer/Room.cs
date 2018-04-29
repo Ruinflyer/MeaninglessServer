@@ -22,10 +22,7 @@ namespace MeaninglessServer
         Timer timer;
         public Room()
         {
-            timer = new Timer();
-            timer.Elapsed += new ElapsedEventHandler(HandleTimer);
-            timer.AutoReset = false;
-            timer.Enabled = true;
+           
         }
         public Status status = Status.Preparing;
 
@@ -131,6 +128,14 @@ namespace MeaninglessServer
             {
                 player.Send(protocol);
             }
+        }
+
+        public void NewTimer()
+        {
+            timer = new Timer();
+            timer.Elapsed += new ElapsedEventHandler(HandleTimer);
+            timer.AutoReset = false;
+            timer.Enabled = true;
         }
 
         /// <summary>
@@ -440,7 +445,7 @@ namespace MeaninglessServer
             p.SpliceFloat(point.Y);
             p.SpliceFloat(circlefieldInfo.Circlefields[circlefieldIndex].ShrinkPercent);
             p.SpliceInt(circlefieldInfo.Circlefields[circlefieldIndex].Movetime);
-
+            Console.WriteLine("pointX:{0} pointY:{1} per:{2} mt{3}",point.X,point.Y, circlefieldInfo.Circlefields[circlefieldIndex].ShrinkPercent, circlefieldInfo.Circlefields[circlefieldIndex].Movetime);
             return p;
         }
 
@@ -485,7 +490,7 @@ namespace MeaninglessServer
 
         private void HandleTimer(object sender, ElapsedEventArgs e)
         {
-
+            
             if (beginTimer)
             {
                 CirclefieldTick();
@@ -514,7 +519,7 @@ namespace MeaninglessServer
             {
                 if (LastCirclefieldTime < timeNow - moveTime)
                 {
-                    if (circlefieldIndex < circlefieldInfo.Circlefields.Count)
+                    if (circlefieldIndex < circlefieldInfo.Circlefields.Count-1)
                     {
                         circlefieldIndex++;
                         LastCirclefieldTime = Utility.GetTimeStamp();

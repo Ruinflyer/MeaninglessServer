@@ -78,6 +78,7 @@ namespace MeaninglessServer
                 BytesProtocol protocol = new BytesProtocol();
                 protocol.SpliceString("AllPlayerLoaded");
                 room.Broadcast(protocol);
+                room.NewTimer();
                 room.beginTimer = true;
                 room.LastCirclefieldTime = Utility.GetTimeStamp();
                 return;
@@ -88,17 +89,19 @@ namespace MeaninglessServer
                 {
                     room.playerReadyDict.Add(playerName, true);
                 }
-
+                Console.WriteLine("PlayerReadyCount:{0} ",room.playerReadyDict.Count);
             }
-            else
+            
+            if(room.playerReadyDict.Count== room.playerDict.Count)
             {
                 //广播-所有玩家加载完毕信息
                 BytesProtocol protocol = new BytesProtocol();
                 protocol.SpliceString("AllPlayerLoaded");
                 room.Broadcast(protocol);
+                room.NewTimer();
                 room.beginTimer = true;
                 room.LastCirclefieldTime = Utility.GetTimeStamp();
-
+                
             }
 
         }
