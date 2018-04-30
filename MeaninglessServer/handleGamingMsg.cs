@@ -111,10 +111,10 @@ namespace MeaninglessServer
         /// </summary>
         public void MsgUpdatePlayerInfo(Player player, BaseProtocol baseProtocol)
         {
-            if (player.playerStatus.status != PlayerStatus.Status.Gaming)
-            {
-                return;
-            }
+            //if (player.playerStatus.status != PlayerStatus.Status.Gaming)
+            //{
+            //    return;
+            //}
             BytesProtocol p = baseProtocol as BytesProtocol;
             int startIndex = 0;
             p.GetString(startIndex, ref startIndex);
@@ -145,6 +145,7 @@ namespace MeaninglessServer
             BytesProtocol protocolReturn = new BytesProtocol();
             protocolReturn.SpliceString("UpdatePlayerInfo");
             protocolReturn.SpliceString(player.name);
+            protocolReturn.SpliceFloat(HP);
             protocolReturn.SpliceFloat(posX);
             protocolReturn.SpliceFloat(posY);
             protocolReturn.SpliceFloat(posZ);

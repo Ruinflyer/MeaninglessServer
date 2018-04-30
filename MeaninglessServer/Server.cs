@@ -27,7 +27,7 @@ namespace MeaninglessServer
         public handlePlayerMsg handlePlayerMsg = new handlePlayerMsg();
 
         //心跳时间
-        public long heartBeatTime = 30;
+        public long heartBeatTime = 200;
         //计时器
         Timer timer = new Timer(1000);
 

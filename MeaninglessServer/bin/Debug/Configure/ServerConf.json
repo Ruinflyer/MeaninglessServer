@@ -2,5 +2,5 @@
     "ServerHost": "127.0.0.1",
     "ServerPort": 8848,
     "Connects": 50,
-    "HeartBeatTime": 30
+    "HeartBeatTime": 200
 }
