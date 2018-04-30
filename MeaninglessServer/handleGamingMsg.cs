@@ -145,15 +145,15 @@ namespace MeaninglessServer
             BytesProtocol protocolReturn = new BytesProtocol();
             protocolReturn.SpliceString("UpdatePlayerInfo");
             protocolReturn.SpliceString(player.name);
-            protocolReturn.SpliceFloat(HP);
+            protocolReturn.SpliceFloat(player.playerStatus.HP);
             protocolReturn.SpliceFloat(posX);
             protocolReturn.SpliceFloat(posY);
             protocolReturn.SpliceFloat(posZ);
             protocolReturn.SpliceFloat(rotX);
             protocolReturn.SpliceFloat(rotY);
             protocolReturn.SpliceFloat(rotZ);
-            protocolReturn.SpliceInt(HeadItem);
-            protocolReturn.SpliceInt(BodyItem);
+            protocolReturn.SpliceInt(player.playerStatus.HeadItemID);
+            protocolReturn.SpliceInt(player.playerStatus.BodyItemID);
             protocolReturn.SpliceInt(WeaponID);
             protocolReturn.SpliceInt(ActionLayer);
             protocolReturn.SpliceString(CurrentAction);
@@ -356,12 +356,9 @@ namespace MeaninglessServer
        /// <param name="baseProtocol"></param>
         public void MsgDoorOpen(Player player, BaseProtocol baseProtocol)
         {
-            //玩家胜利
-            //消息结构: (string)PlayerSuccess
-            if (player.playerStatus.status != PlayerStatus.Status.Gaming)
-            {
-                return;
-            }
+            //开门
+            //消息结构: (string)DoorOpen + (int)DoorID
+
             Room room = player.playerStatus.room;
             int startIndex = 0;
             BytesProtocol p = baseProtocol as BytesProtocol;
@@ -374,7 +371,24 @@ namespace MeaninglessServer
             room.Broadcast(doorProtocol);
         }
 
-       
+        /// <summary>
+        /// 拾取物品
+        /// </summary>
+       public void MsgPickItem(Player player, BaseProtocol baseProtocol)
+        {
+            //拾取物品
+            //消息结构: (string)PickItem + (int)GroundItemID
+            int startIndex = 0;
+            BytesProtocol get = baseProtocol as BytesProtocol;
+            get.GetString(startIndex, ref startIndex);
+            int GroundItemID=get.GetInt(startIndex, ref startIndex);
+
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("PickItem");
+            p.SpliceInt(GroundItemID);
+            player.playerStatus.room.Broadcast(p);
+        }
+
         /// <summary>
         /// 获取房间玩家信息
         /// </summary>
