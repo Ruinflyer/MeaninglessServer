@@ -30,7 +30,7 @@ namespace MeaninglessServer
         public int HeadItemID;
         public int BodyItemID;
         public int WeaponID;
-        public int ActionLayer;
+        public int AttackID;
         public string CurrentAction;
 
         /**BuffType:
@@ -43,7 +43,7 @@ namespace MeaninglessServer
         public long LastUpdateTime;
         public PlayerStatus()
         {
-
+            HP = 100f;
         }
 
       

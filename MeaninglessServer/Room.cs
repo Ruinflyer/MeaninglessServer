@@ -43,7 +43,7 @@ namespace MeaninglessServer
         #region 毒圈变量
         public CirclefieldInfo circlefieldInfo;
         public int circlefieldIndex = 0;
-        private Point Center;
+
         private const float R = 250f;
         public long LastCirclefieldTime;
         public bool beginTimer = false;

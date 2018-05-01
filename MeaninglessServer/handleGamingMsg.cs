@@ -118,7 +118,6 @@ namespace MeaninglessServer
             BytesProtocol p = baseProtocol as BytesProtocol;
             int startIndex = 0;
             p.GetString(startIndex, ref startIndex);
-            float HP = p.GetFloat(startIndex, ref startIndex);
             float posX = p.GetFloat(startIndex, ref startIndex);
             float posY = p.GetFloat(startIndex, ref startIndex);
             float posZ = p.GetFloat(startIndex, ref startIndex);
@@ -128,17 +127,16 @@ namespace MeaninglessServer
             int HeadItem = p.GetInt(startIndex, ref startIndex);
             int BodyItem = p.GetInt(startIndex, ref startIndex);
             int WeaponID = p.GetInt(startIndex, ref startIndex);
-            int ActionLayer = p.GetInt(startIndex, ref startIndex);
+            int AttackID = p.GetInt(startIndex, ref startIndex);
             string CurrentAction = p.GetString(startIndex, ref startIndex);
 
-            player.playerStatus.HP = HP;
             player.playerStatus.posX = posX;
             player.playerStatus.posY = posY;
             player.playerStatus.posZ = posZ;
             player.playerStatus.HeadItemID = HeadItem;
             player.playerStatus.BodyItemID = BodyItem;
             player.playerStatus.WeaponID = WeaponID;
-            player.playerStatus.ActionLayer = ActionLayer;
+            player.playerStatus.AttackID = AttackID;
             player.playerStatus.CurrentAction = CurrentAction;
             player.playerStatus.LastUpdateTime = Utility.GetTimeStamp();
 
@@ -155,7 +153,7 @@ namespace MeaninglessServer
             protocolReturn.SpliceInt(player.playerStatus.HeadItemID);
             protocolReturn.SpliceInt(player.playerStatus.BodyItemID);
             protocolReturn.SpliceInt(WeaponID);
-            protocolReturn.SpliceInt(ActionLayer);
+            protocolReturn.SpliceInt(AttackID);
             protocolReturn.SpliceString(CurrentAction);
             player.playerStatus.room.Broadcast(protocolReturn);
         }
@@ -196,6 +194,7 @@ namespace MeaninglessServer
                         deadProtool.SpliceString(player.name);
                         deadProtool.SpliceString(HitplayerName);
                         room.Broadcast(deadProtool);
+
                         RoomManager.instance.LeaveRoom(room.playerDict[HitplayerName]);
 
                     }
