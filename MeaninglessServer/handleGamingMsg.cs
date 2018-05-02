@@ -447,6 +447,7 @@ namespace MeaninglessServer
 
             BytesProtocol p = new BytesProtocol();
             p.SpliceString("PlayerEquipHelmet");
+            p.SpliceString(player.name);
             p.SpliceInt(player.playerStatus.HeadItemID);
             room.Broadcast(p);
         }
@@ -464,6 +465,7 @@ namespace MeaninglessServer
 
             BytesProtocol p = new BytesProtocol();
             p.SpliceString("PlayerEquipClothe");
+            p.SpliceString(player.name);
             p.SpliceInt(player.playerStatus.BodyItemID);
             room.Broadcast(p);
         }
@@ -481,11 +483,9 @@ namespace MeaninglessServer
 
             BytesProtocol p = new BytesProtocol();
             p.SpliceString("PlayerEquipWeapon");
+            p.SpliceString(player.name);
             p.SpliceInt(player.playerStatus.WeaponID);
             room.Broadcast(p);
         }
     }                                    
 }
-
-//PlayerEquipClothe
-//PlayerEquipWeapon

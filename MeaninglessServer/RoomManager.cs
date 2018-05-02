@@ -25,10 +25,6 @@ namespace MeaninglessServer
             {
                 RoomList.Add(room);
                 room.AddPlayer(player);
-                //生成地图协议
-                room.MapProtocol = room.GetMaptitleDataProtocol();
-                //生成物品协议
-                room.ItemsProtocol = room.GetItemsProtocol();
                 room.circlefieldInfo = GetCirclefieldInfo();
             }
 
