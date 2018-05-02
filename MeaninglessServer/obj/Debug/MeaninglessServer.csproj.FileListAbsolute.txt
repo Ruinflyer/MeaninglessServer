@@ -22,3 +22,11 @@ C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\obj\Debug\Me
 C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csproj.CopyComplete
 C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.exe
 C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.pdb
+D:\GitHub\MeaninglessServer\MeaninglessServer\MeaninglessServer\bin\Debug\MeaninglessServer.exe
+D:\GitHub\MeaninglessServer\MeaninglessServer\MeaninglessServer\bin\Debug\MeaninglessServer.pdb
+D:\GitHub\MeaninglessServer\MeaninglessServer\MeaninglessServer\bin\Debug\Newtonsoft.Json.dll
+D:\GitHub\MeaninglessServer\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csprojResolveAssemblyReference.cache
+D:\GitHub\MeaninglessServer\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csproj.CoreCompileInputs.cache
+D:\GitHub\MeaninglessServer\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csproj.CopyComplete
+D:\GitHub\MeaninglessServer\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.exe
+D:\GitHub\MeaninglessServer\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.pdb

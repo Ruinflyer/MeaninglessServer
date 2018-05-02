@@ -124,18 +124,12 @@ namespace MeaninglessServer
             float rotX = p.GetFloat(startIndex, ref startIndex);
             float rotY = p.GetFloat(startIndex, ref startIndex);
             float rotZ = p.GetFloat(startIndex, ref startIndex);
-            int HeadItem = p.GetInt(startIndex, ref startIndex);
-            int BodyItem = p.GetInt(startIndex, ref startIndex);
-            int WeaponID = p.GetInt(startIndex, ref startIndex);
             int AttackID = p.GetInt(startIndex, ref startIndex);
             string CurrentAction = p.GetString(startIndex, ref startIndex);
 
             player.playerStatus.posX = posX;
             player.playerStatus.posY = posY;
             player.playerStatus.posZ = posZ;
-            player.playerStatus.HeadItemID = HeadItem;
-            player.playerStatus.BodyItemID = BodyItem;
-            player.playerStatus.WeaponID = WeaponID;
             player.playerStatus.AttackID = AttackID;
             player.playerStatus.CurrentAction = CurrentAction;
             player.playerStatus.LastUpdateTime = Utility.GetTimeStamp();
@@ -150,9 +144,6 @@ namespace MeaninglessServer
             protocolReturn.SpliceFloat(rotX);
             protocolReturn.SpliceFloat(rotY);
             protocolReturn.SpliceFloat(rotZ);
-            protocolReturn.SpliceInt(player.playerStatus.HeadItemID);
-            protocolReturn.SpliceInt(player.playerStatus.BodyItemID);
-            protocolReturn.SpliceInt(WeaponID);
             protocolReturn.SpliceInt(AttackID);
             protocolReturn.SpliceString(CurrentAction);
             player.playerStatus.room.Broadcast(protocolReturn);
@@ -441,5 +432,60 @@ namespace MeaninglessServer
             }
             player.Send(p);
         }
-    }
+
+        /// <summary>
+        /// 玩家戴头盔
+        /// </summary>
+        public void MsgPlayerEquipHelmet(Player player,BaseProtocol baseProtocol)
+        {
+            int startIndex = 0;
+            BytesProtocol get = baseProtocol as BytesProtocol;
+            Room room = player.playerStatus.room;
+            get.GetString(startIndex, ref startIndex);
+            int ItemID= get.GetInt(startIndex, ref startIndex);
+            player.playerStatus.HeadItemID = ItemID;
+
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("PlayerEquipHelmet");
+            p.SpliceInt(player.playerStatus.HeadItemID);
+            room.Broadcast(p);
+        }
+        /// <summary>
+        /// 玩家拿衣服
+        /// </summary>
+        public void MsgPlayerEquipClothe(Player player, BaseProtocol baseProtocol)
+        {
+            int startIndex = 0;
+            BytesProtocol get = baseProtocol as BytesProtocol;
+            Room room = player.playerStatus.room;
+            get.GetString(startIndex, ref startIndex);
+            int ItemID = get.GetInt(startIndex, ref startIndex);
+            player.playerStatus.BodyItemID = ItemID;
+
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("PlayerEquipClothe");
+            p.SpliceInt(player.playerStatus.BodyItemID);
+            room.Broadcast(p);
+        }
+        /// <summary>
+        /// 玩家装武器
+        /// </summary>
+        public void MsgPlayerEquipWeapon(Player player, BaseProtocol baseProtocol)
+        {
+            int startIndex = 0;
+            BytesProtocol get = baseProtocol as BytesProtocol;
+            Room room = player.playerStatus.room;
+            get.GetString(startIndex, ref startIndex);
+            int ItemID = get.GetInt(startIndex, ref startIndex);
+            player.playerStatus.WeaponID = ItemID;
+
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("PlayerEquipWeapon");
+            p.SpliceInt(player.playerStatus.WeaponID);
+            room.Broadcast(p);
+        }
+    }                                    
 }
+
+//PlayerEquipClothe
+//PlayerEquipWeapon
