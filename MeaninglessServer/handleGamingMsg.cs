@@ -251,7 +251,7 @@ namespace MeaninglessServer
         {
 
             //玩家魔法
-            //消息结构: (string)PlayerMagic + (string)playerName + (int)magicItemID + magicItemID + (float)posX + (float)posY +(float)posZ+ (float)rotX + (float)rotY + (float)rotZ
+            //消息结构: (string)PlayerMagic  + (string)magicName + (float)posX + (float)posY +(float)posZ+ (float)rotX + (float)rotY + (float)rotZ
             if (player.playerStatus.status != PlayerStatus.Status.Gaming)
             {
                 return;
@@ -261,8 +261,7 @@ namespace MeaninglessServer
             int startIndex = 0;
             BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
-            string playerName = p.GetString(startIndex, ref startIndex);
-            int magicItemID = p.GetInt(startIndex, ref startIndex);
+            string magicName = p.GetString(startIndex, ref startIndex);
             float posX = p.GetFloat(startIndex, ref startIndex);
             float posY = p.GetFloat(startIndex, ref startIndex);
             float posZ = p.GetFloat(startIndex, ref startIndex);
@@ -273,8 +272,7 @@ namespace MeaninglessServer
             //转发魔法消息
             BytesProtocol p_broadcast = new BytesProtocol();
             p_broadcast.SpliceString("PlayerMagic");
-            p_broadcast.SpliceString(player.name);
-            p_broadcast.SpliceInt(magicItemID);
+            p_broadcast.SpliceString(magicName);
             p_broadcast.SpliceFloat(posX);
             p_broadcast.SpliceFloat(posY);
             p_broadcast.SpliceFloat(posZ);
