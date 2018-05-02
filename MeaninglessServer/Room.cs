@@ -286,6 +286,7 @@ namespace MeaninglessServer
             {
                 //开始时发送毒圈保持时间
                 Broadcast(CirclefieldTimeProtocol());
+                Console.WriteLine("first CirclefieldTime:"+holdTime.ToString());
                 FirstRound = false;
             }
             if (Moving == false)
