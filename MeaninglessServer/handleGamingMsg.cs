@@ -117,13 +117,11 @@ namespace MeaninglessServer
             float rotX = p.GetFloat(startIndex, ref startIndex);
             float rotY = p.GetFloat(startIndex, ref startIndex);
             float rotZ = p.GetFloat(startIndex, ref startIndex);
-            int AttackID = p.GetInt(startIndex, ref startIndex);
             string CurrentAction = p.GetString(startIndex, ref startIndex);
 
             player.playerStatus.posX = posX;
             player.playerStatus.posY = posY;
             player.playerStatus.posZ = posZ;
-            player.playerStatus.AttackID = AttackID;
             player.playerStatus.CurrentAction = CurrentAction;
             player.playerStatus.LastUpdateTime = Utility.GetTimeStamp();
 
@@ -137,7 +135,6 @@ namespace MeaninglessServer
             protocolReturn.SpliceFloat(rotX);
             protocolReturn.SpliceFloat(rotY);
             protocolReturn.SpliceFloat(rotZ);
-            protocolReturn.SpliceInt(AttackID);
             protocolReturn.SpliceString(CurrentAction);
             player.playerStatus.room.Broadcast(protocolReturn);
         }
@@ -498,6 +495,28 @@ namespace MeaninglessServer
                 p.SpliceInt(room.playerDroppoints[index]);
             }
             player.Send(p);
+        }
+
+        public void MsgDropItem(Player player, BaseProtocol baseProtocol)
+        {
+            //拾取物品
+            //消息结构: (string)PickItem + (int)GroundItemID
+            int startIndex = 0;
+            BytesProtocol p = baseProtocol as BytesProtocol;
+            p.GetString(startIndex, ref startIndex);
+            int GroundItemID = p.GetInt(startIndex, ref startIndex);
+            float posX = p.GetFloat(startIndex, ref startIndex);
+            float posY = p.GetFloat(startIndex, ref startIndex);
+            float posZ = p.GetFloat(startIndex, ref startIndex);
+
+            //转发魔法消息
+            BytesProtocol p_broadcast = new BytesProtocol();
+            p_broadcast.SpliceString("DropItem");
+            p_broadcast.SpliceInt(GroundItemID);
+            p_broadcast.SpliceFloat(posX);
+            p_broadcast.SpliceFloat(posY);
+            p_broadcast.SpliceFloat(posZ);
+            player.playerStatus.room.Broadcast(p);
         }
     }                                    
 }

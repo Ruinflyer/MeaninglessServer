@@ -30,7 +30,6 @@ namespace MeaninglessServer
         public int HeadItemID;
         public int BodyItemID;
         public int WeaponID;
-        public int AttackID;
         public string CurrentAction;
 
         /**BuffType:
