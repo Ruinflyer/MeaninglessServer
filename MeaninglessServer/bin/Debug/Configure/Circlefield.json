@@ -8,20 +8,20 @@
         },
         {
             "Holdtime": 60,
-            "Movetime": 30,
-            "ShrinkPercent": 0.5,
+            "Movetime": 60,
+            "ShrinkPercent": 0.6,
             "DamagePerSec": 4
         },
         {
             "Holdtime": 30,
-            "Movetime": 15,
-            "ShrinkPercent": 0.5,
+            "Movetime": 30,
+            "ShrinkPercent": 0.6,
             "DamagePerSec": 8
         },
         {
-            "Holdtime": 30,
-            "Movetime": 15,
-            "ShrinkPercent": 0.5,
+            "Holdtime": 15,
+            "Movetime": 30,
+            "ShrinkPercent": 0.6,
             "DamagePerSec": 16
         }
     ]

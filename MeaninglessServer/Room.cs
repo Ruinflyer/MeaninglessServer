@@ -216,6 +216,30 @@ namespace MeaninglessServer
             return p;
         }
 
+        /// <summary>
+        /// 毒圈协议-只随机一次中心点坐标
+        /// </summary>
+        /// <returns></returns>
+        private bool CalcCenterOnce = true;
+        private Point lastPoint;
+        public BytesProtocol CirclefieldProtocol2()
+        {
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("Circlefield");
+            //Point point= CalcCircleCenter(0, 0, R, circlefieldInfo.Circlefields[circlefieldIndex].ShrinkPercent);
+            if(CalcCenterOnce)
+            {
+                lastPoint.X = (float)Utility.NextDouble(new Random(), 0, 100);
+                lastPoint.Y = (float)Utility.NextDouble(new Random(), 0, 90);
+                CalcCenterOnce = false;
+            }
+            p.SpliceFloat(lastPoint.X);
+            p.SpliceFloat(lastPoint.Y);
+            p.SpliceFloat(circlefieldInfo.Circlefields[circlefieldIndex].ShrinkPercent);
+            p.SpliceInt(circlefieldInfo.Circlefields[circlefieldIndex].Movetime);
+            Console.WriteLine("pointX:{0} pointY:{1} Shrinkper:{2} movetime{3} Round:{4}", lastPoint.X, lastPoint.Y, circlefieldInfo.Circlefields[circlefieldIndex].ShrinkPercent, circlefieldInfo.Circlefields[circlefieldIndex].Movetime,circlefieldIndex);
+            return p;
+        }
 
         public BytesProtocol CirclefieldTimeProtocol()
         {
@@ -292,7 +316,7 @@ namespace MeaninglessServer
             {
                 if (LastCirclefieldTime < timeNow - holdTime)
                 {
-                    Broadcast(CirclefieldProtocol());
+                    Broadcast(CirclefieldProtocol2());
                     LastCirclefieldTime = Utility.GetTimeStamp();
                     Moving = true;
                 }
