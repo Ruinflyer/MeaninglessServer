@@ -27,13 +27,6 @@ namespace MeaninglessServer
             player.playerStatus.room.StartGame();
         }
 
-        /// <summary>
-        /// 获取地图块数据-废弃
-        /// </summary>
-        public void MsgGetMapData(Player player, BaseProtocol baseProtocol)
-        {
-            player.Send(player.playerStatus.room.MapProtocol);
-        }
 
         /// <summary>
         /// 获取地图物品数据
@@ -484,6 +477,27 @@ namespace MeaninglessServer
             p.SpliceString(player.name);
             p.SpliceInt(player.playerStatus.WeaponID);
             room.Broadcast(p);
+        }
+
+        /// <summary>
+        /// 获取下落点
+        /// </summary>
+        public void MsgDroppoint(Player player, BaseProtocol baseProtocol)
+        {
+            int startIndex = 0;
+            BytesProtocol get = baseProtocol as BytesProtocol;
+            get.GetString(startIndex, ref startIndex);
+            Room room = player.playerStatus.room;
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("Droppoint");
+            Random rand = new Random();
+            lock (room.playerDroppoints)
+            {
+                int index = rand.Next(0, room.playerDroppoints.Count - 1);
+                room.playerDroppoints.RemoveAt(index);
+                p.SpliceInt(room.playerDroppoints[index]);
+            }
+            player.Send(p);
         }
     }                                    
 }

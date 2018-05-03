@@ -30,9 +30,8 @@ namespace MeaninglessServer
         public Dictionary<string, Player> playerDict = new Dictionary<string, Player>();
         public Dictionary<string, bool> playerReadyDict = new Dictionary<string, bool>();
 
-        public BytesProtocol MapProtocol = null;
-        public BytesProtocol ItemsProtocol = null;
-
+        public List<int> playerDroppoints = new List<int>();
+        public int DroppointNum;
 
         #region 毒圈变量
         public CirclefieldInfo circlefieldInfo;

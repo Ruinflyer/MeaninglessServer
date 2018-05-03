@@ -26,6 +26,15 @@ namespace MeaninglessServer
                 RoomList.Add(room);
                 room.AddPlayer(player);
                 room.circlefieldInfo = GetCirclefieldInfo();
+
+                room.DroppointNum = 10;
+                for (int i=0;i<10;i++)
+                {
+                    //初始化10个下落点
+                    room.playerDroppoints.Add(i);
+                }
+                
+                
             }
 
         }
