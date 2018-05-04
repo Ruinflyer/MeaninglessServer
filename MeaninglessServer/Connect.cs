@@ -50,7 +50,7 @@ namespace MeaninglessServer
             return BUFFER_SIZE - buffCount;
         }
 
-        public string GetAdress()
+        public string GetAddress()
         {
             if (!isUse)
             {
@@ -76,7 +76,7 @@ namespace MeaninglessServer
                 player.Disconnect();
                 return;
             }
-            Console.WriteLine("[断开连接]："+GetAdress());
+            Console.WriteLine("[断开连接]："+ GetAddress());
             socket.Shutdown(SocketShutdown.Both);
             Thread.Sleep(10);
             socket.Close();

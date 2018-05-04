@@ -118,7 +118,7 @@ namespace MeaninglessServer
                 {
                     Connect connect = connects[index];
                     connect.Init(socket);
-                    string adress = connect.GetAdress();
+                    string adress = connect.GetAddress();
                     Console.WriteLine("[客户端 " + adress + " ]：连接，ConnectID：" + index);
                     //开始异步接收客户端数据
                     connect.socket.BeginReceive(connect.buff, connect.buffCount, connect.GetRemainBuff(), SocketFlags.None, ReceiveCallBack, connect);
@@ -147,7 +147,7 @@ namespace MeaninglessServer
                     int count = connect.socket.EndReceive(ar);
                     if (count <= 0)
                     {
-                        Console.WriteLine("[客户端 " + connect.GetAdress() + " ]：断开连接");
+                        Console.WriteLine("[客户端 " + connect.GetAddress() + " ]：断开连接");
                         connect.Close();
                         return;
                     }
@@ -157,7 +157,7 @@ namespace MeaninglessServer
                 }
                 catch
                 {
-                    Console.WriteLine("[客户端 " + connect.GetAdress() + " ]：断开连接");
+                    Console.WriteLine("[客户端 " + connect.GetAddress() + " ]：断开连接");
                     connect.Close();
                 }
 
@@ -206,7 +206,7 @@ namespace MeaninglessServer
                     return;
                 }
                 object[] param = new object[] { connect, baseProtocol };
-                Console.WriteLine("[客户端 " + connect.GetAdress() + " ](连接消息)：" + methodName + " 处理");
+                Console.WriteLine("[客户端 " + connect.GetAddress() + " ](连接消息)：" + methodName + " 处理");
                 methodInfo.Invoke(handleConnectMsg, param);
             }
             else
@@ -250,7 +250,7 @@ namespace MeaninglessServer
 
                 if (connect.lastTick < timeNow - heartBeatTime)
                 {
-                    Console.WriteLine("[客户端 " + connect.GetAdress() + " ]：过久无心跳断开连接 ");
+                    Console.WriteLine("[客户端 " + connect.GetAddress() + " ]：过久无心跳断开连接 ");
                     lock (connect)
                     {
                         connect.Close();
@@ -275,7 +275,7 @@ namespace MeaninglessServer
             }
             catch (Exception e)
             {
-                Console.WriteLine("[发送消息]" + connect.GetAdress() + " : " + e.Message);
+                Console.WriteLine("[发送消息]" + connect.GetAddress() + " : " + e.Message);
             }
         }
         /// <summary>
