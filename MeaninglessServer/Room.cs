@@ -229,9 +229,9 @@ namespace MeaninglessServer
             //Point point= CalcCircleCenter(0, 0, R, circlefieldInfo.Circlefields[circlefieldIndex].ShrinkPercent);
             if(CalcCenterOnce)
             {
-                lastPoint.X = (float)Utility.NextDouble(new Random(), 0, 100);
-                lastPoint.Y = (float)Utility.NextDouble(new Random(), 0, 90);
                 CalcCenterOnce = false;
+                lastPoint.X = (float)Utility.NextDouble(new Random(), 20, 60);
+                lastPoint.Y = (float)Utility.NextDouble(new Random(), 20, 60);
             }
             p.SpliceFloat(lastPoint.X);
             p.SpliceFloat(lastPoint.Y);

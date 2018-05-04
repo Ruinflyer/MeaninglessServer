@@ -195,20 +195,10 @@ namespace MeaninglessServer
         {
             //玩家被毒圈伤害协议
             //消息结构:(string)PlayerPoison
-
             Room room = player.playerStatus.room;
-            //玩家不在游戏状态，当没事发生
-            if (player.playerStatus.status != PlayerStatus.Status.Gaming)
-            {
-                return;
-            }
-            //玩家不在房间中,返回
-
-
             int startIndex = 0;
             BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
-
 
             if (player.playerStatus.HP > 0)
             {
@@ -227,9 +217,27 @@ namespace MeaninglessServer
                 room.Broadcast(deadProtool);
                 RoomManager.instance.LeaveRoom(player);
             }
+        }
 
-
-
+        /// <summary>
+        /// 玩家死亡，自杀时客户端上报
+        /// </summary>
+        public void MsgPlayerDead(Player player, BaseProtocol baseProtocol)
+        {
+            int startIndex = 0;
+            BytesProtocol p = baseProtocol as BytesProtocol;
+            Room room = player.playerStatus.room;
+            p.GetString(startIndex, ref startIndex);
+            BytesProtocol ret = new BytesProtocol();
+            
+            if(room.playerDict.ContainsKey(player.name))
+            {
+                ret.SpliceString("PlayerDead");
+                ret.SpliceString(player.name);
+                room.Broadcast(ret);
+                RoomManager.instance.LeaveRoom(room.playerDict[player.name]);
+            }
+            
         }
 
         /// <summary>
@@ -312,17 +320,11 @@ namespace MeaninglessServer
         {
             //玩家胜利
             //消息结构: (string)PlayerSuccess
-            if (player.playerStatus.status != PlayerStatus.Status.Gaming)
-            {
-                return;
-            }
+          
             Room room = player.playerStatus.room;
 
-            int startIndex = 0;
-            BytesProtocol p = baseProtocol as BytesProtocol;
-            p.GetString(startIndex, ref startIndex);
-
-
+            BytesProtocol p =  new BytesProtocol();
+            
             RoomManager.instance.LeaveRoom(player);
 
         }
