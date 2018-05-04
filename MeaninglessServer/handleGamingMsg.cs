@@ -8,7 +8,7 @@ namespace MeaninglessServer
     public partial class handlePlayerMsg
     {
 
-        private int randomItemCode=0;
+        private int randomItemCode = 0;
 
         public void MsgRequestStartGame(Player player, BaseProtocol baseProtocol)
         {
@@ -38,12 +38,12 @@ namespace MeaninglessServer
             protocol.GetString(startIndex, ref startIndex);
 
             Random ran = new Random((int)Utility.GetTimeStamp());
-            
-            if (randomItemCode==0)
+
+            if (randomItemCode == 0)
             {
                 randomItemCode = ran.Next(1, 999);
             }
-            Console.WriteLine("RandomItemCode Set: "+randomItemCode.ToString());
+            Console.WriteLine("RandomItemCode Set: " + randomItemCode.ToString());
             BytesProtocol p = new BytesProtocol();
             p.SpliceString("GetMapItemData");
             p.SpliceInt(randomItemCode);
@@ -57,7 +57,7 @@ namespace MeaninglessServer
         /// </summary>
         public void MsgPlayerReady(Player player, BaseProtocol baseProtocol)
         {
-            
+
             int startIndex = 0;
             BytesProtocol p = baseProtocol as BytesProtocol;
             p.GetString(startIndex, ref startIndex);
@@ -66,7 +66,7 @@ namespace MeaninglessServer
             Room room = player.playerStatus.room;
 
             //测试单人使用
-            if(room.playerDict.Count==1)
+            if (room.playerDict.Count == 1)
             {
                 BytesProtocol protocol = new BytesProtocol();
                 protocol.SpliceString("AllPlayerLoaded");
@@ -82,10 +82,10 @@ namespace MeaninglessServer
                 {
                     room.playerReadyDict.Add(playerName, true);
                 }
-                Console.WriteLine("PlayerReadyCount:{0} ",room.playerReadyDict.Count);
+                Console.WriteLine("PlayerReadyCount:{0} ", room.playerReadyDict.Count);
             }
-            
-            if(room.playerReadyDict.Count== room.playerDict.Count)
+
+            if (room.playerReadyDict.Count == room.playerDict.Count)
             {
                 //广播-所有玩家加载完毕信息
                 BytesProtocol protocol = new BytesProtocol();
@@ -94,7 +94,7 @@ namespace MeaninglessServer
                 room.NewTimer();
                 room.beginTimer = true;
                 room.LastCirclefieldTime = Utility.GetTimeStamp();
-                
+
             }
 
         }
@@ -148,7 +148,7 @@ namespace MeaninglessServer
             //消息结构:(string)PlayerHitSomeone + (string)PlayerName + (float)Damage
 
             //玩家不在游戏状态，当没事发生
-          
+
             Room room = player.playerStatus.room;
 
 
@@ -185,6 +185,17 @@ namespace MeaninglessServer
             {
                 //玩家不在房间中,返回
                 return;
+            }
+
+            //玩家胜利
+            BytesProtocol win = new BytesProtocol();
+            win.SpliceString("PlayerSuccess");
+            if (room.playerDict.Count == 1)
+            {
+                foreach (string winner in room.playerDict.Keys)
+                {
+                    room.playerDict[winner].Send(win);
+                }
             }
         }
 
@@ -229,15 +240,15 @@ namespace MeaninglessServer
             Room room = player.playerStatus.room;
             p.GetString(startIndex, ref startIndex);
             BytesProtocol ret = new BytesProtocol();
-            
-            if(room.playerDict.ContainsKey(player.name))
+
+            if (room.playerDict.ContainsKey(player.name))
             {
                 ret.SpliceString("PlayerDead");
                 ret.SpliceString(player.name);
                 room.Broadcast(ret);
                 RoomManager.instance.LeaveRoom(room.playerDict[player.name]);
             }
-            
+
         }
 
         /// <summary>
@@ -320,20 +331,20 @@ namespace MeaninglessServer
         {
             //玩家胜利
             //消息结构: (string)PlayerSuccess
-          
+
             Room room = player.playerStatus.room;
 
-            BytesProtocol p =  new BytesProtocol();
-            
+            BytesProtocol p = new BytesProtocol();
+
             RoomManager.instance.LeaveRoom(player);
 
         }
 
-       /// <summary>
-       /// 房间门打开转发
-       /// </summary>
-       /// <param name="player"></param>
-       /// <param name="baseProtocol"></param>
+        /// <summary>
+        /// 房间门打开转发
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="baseProtocol"></param>
         public void MsgDoorOpen(Player player, BaseProtocol baseProtocol)
         {
             //开门
@@ -354,14 +365,14 @@ namespace MeaninglessServer
         /// <summary>
         /// 拾取物品
         /// </summary>
-       public void MsgPickItem(Player player, BaseProtocol baseProtocol)
+        public void MsgPickItem(Player player, BaseProtocol baseProtocol)
         {
             //拾取物品
             //消息结构: (string)PickItem + (int)GroundItemID
             int startIndex = 0;
             BytesProtocol get = baseProtocol as BytesProtocol;
             get.GetString(startIndex, ref startIndex);
-            int GroundItemID=get.GetInt(startIndex, ref startIndex);
+            int GroundItemID = get.GetInt(startIndex, ref startIndex);
 
             BytesProtocol p = new BytesProtocol();
             p.SpliceString("PickItem");
@@ -383,7 +394,7 @@ namespace MeaninglessServer
             BytesProtocol p = new BytesProtocol();
             p.SpliceString("GetPlayersInfo");
             p.SpliceInt(room.playerDict.Count);
-            foreach(Player pr in room.playerDict.Values)
+            foreach (Player pr in room.playerDict.Values)
             {
                 p.SpliceString(pr.name);
             }
@@ -400,16 +411,16 @@ namespace MeaninglessServer
             BytesProtocol get = baseProtocol as BytesProtocol;
             Room room = player.playerStatus.room;
             get.GetString(startIndex, ref startIndex);
-            string PlayerName =get.GetString(startIndex, ref startIndex);
-            int bufftype= get.GetInt(startIndex, ref startIndex);
-            float bufftime= get.GetFloat(startIndex, ref startIndex);
+            string PlayerName = get.GetString(startIndex, ref startIndex);
+            int bufftype = get.GetInt(startIndex, ref startIndex);
+            float bufftime = get.GetFloat(startIndex, ref startIndex);
             if (room.playerDict.ContainsKey(PlayerName))
             {
                 room.playerDict[PlayerName].playerStatus.buffType = bufftype;
                 room.playerDict[PlayerName].playerStatus.buffTime = bufftime;
             }
-           
-            
+
+
 
             BytesProtocol p = new BytesProtocol();
             p.SpliceString("PlayerGetBuff");
@@ -426,13 +437,13 @@ namespace MeaninglessServer
         /// <summary>
         /// 玩家戴头盔
         /// </summary>
-        public void MsgPlayerEquipHelmet(Player player,BaseProtocol baseProtocol)
+        public void MsgPlayerEquipHelmet(Player player, BaseProtocol baseProtocol)
         {
             int startIndex = 0;
             BytesProtocol get = baseProtocol as BytesProtocol;
             Room room = player.playerStatus.room;
             get.GetString(startIndex, ref startIndex);
-            int ItemID= get.GetInt(startIndex, ref startIndex);
+            int ItemID = get.GetInt(startIndex, ref startIndex);
             player.playerStatus.HeadItemID = ItemID;
 
             BytesProtocol p = new BytesProtocol();
@@ -520,5 +531,5 @@ namespace MeaninglessServer
             p_broadcast.SpliceFloat(posZ);
             player.playerStatus.room.Broadcast(p);
         }
-    }                                    
+    }
 }
