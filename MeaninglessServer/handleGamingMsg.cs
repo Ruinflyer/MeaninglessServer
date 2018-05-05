@@ -187,16 +187,7 @@ namespace MeaninglessServer
                 return;
             }
 
-            //玩家胜利
-            BytesProtocol win = new BytesProtocol();
-            win.SpliceString("PlayerSuccess");
-            if (room.playerDict.Count == 1)
-            {
-                foreach (string winner in room.playerDict.Keys)
-                {
-                    room.playerDict[winner].Send(win);
-                }
-            }
+            room.PlayerSuccess();
         }
 
         /// <summary>
@@ -228,6 +219,7 @@ namespace MeaninglessServer
                 room.Broadcast(deadProtool);
                 RoomManager.instance.LeaveRoom(player);
             }
+            room.PlayerSuccess();
         }
 
         /// <summary>
@@ -248,7 +240,7 @@ namespace MeaninglessServer
                 room.Broadcast(ret);
                 RoomManager.instance.LeaveRoom(room.playerDict[player.name]);
             }
-
+            room.PlayerSuccess();
         }
 
         /// <summary>
@@ -324,21 +316,21 @@ namespace MeaninglessServer
             room.Broadcast(p_broadcast);
         }
 
-        /// <summary>
-        /// 玩家胜利
-        /// </summary>
-        public void MsgPlayerSuccess(Player player, BaseProtocol baseProtocol)
-        {
-            //玩家胜利
-            //消息结构: (string)PlayerSuccess
+        ///// <summary>
+        ///// 玩家胜利
+        ///// </summary>
+        //public void MsgPlayerSuccess(Player player, BaseProtocol baseProtocol)
+        //{
+        //    //玩家胜利
+        //    //消息结构: (string)PlayerSuccess
 
-            Room room = player.playerStatus.room;
+        //    Room room = player.playerStatus.room;
 
-            BytesProtocol p = new BytesProtocol();
+        //    BytesProtocol p = new BytesProtocol();
 
-            RoomManager.instance.LeaveRoom(player);
+        //    RoomManager.instance.LeaveRoom(player);
 
-        }
+        //}
 
         /// <summary>
         /// 房间门打开转发

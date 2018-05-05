@@ -343,6 +343,21 @@ namespace MeaninglessServer
 
         }
 
-
+        /// <summary>
+        /// 战局只剩最后一人，发送玩家胜利消息
+        /// </summary>
+        public void PlayerSuccess()
+        {
+            //玩家胜利
+            BytesProtocol win = new BytesProtocol();
+            win.SpliceString("PlayerSuccess");
+            if (playerDict.Count == 1)
+            {
+                foreach (string winner in playerDict.Keys)
+                {
+                    playerDict[winner].Send(win);
+                }
+            }
+        }
     }
 }
