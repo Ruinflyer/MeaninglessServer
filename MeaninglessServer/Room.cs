@@ -43,7 +43,6 @@ namespace MeaninglessServer
         private bool Moving = false;
         private bool FirstRound = true;
         #endregion
-        /*********************************/
 
         /// <summary>
         /// 加入玩家

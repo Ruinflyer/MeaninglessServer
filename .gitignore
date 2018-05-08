@@ -1,2 +1,8 @@
-
+.vs/
 .vs/MeaninglessServer/v15/.suo
+.vs/MeaninglessServer/v15/Server/sqlite3/storage.ide-shm
+.vs/MeaninglessServer/v15/Server/sqlite3/storage.ide-wal
+.vs/MeaninglessServer/v15/Server/sqlite3/storage.ide
+*.ide
+
+
