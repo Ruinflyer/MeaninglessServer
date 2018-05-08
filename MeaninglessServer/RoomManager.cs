@@ -8,8 +8,6 @@ namespace MeaninglessServer
     public class RoomManager
     {
         public static RoomManager instance;
-        private MaptileInfo maptile;
-        private ItemsInfo itemsInfo;
         private CirclefieldInfo circlefieldInfo;
         public RoomManager()
         {
