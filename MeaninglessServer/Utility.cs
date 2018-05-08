@@ -18,9 +18,7 @@ namespace MeaninglessServer
         public static long GetTimeStamp()
         {
             TimeSpan timeSpan = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-
             return Convert.ToInt64(timeSpan.TotalSeconds);
-
         }
 
         /// <summary>
@@ -59,12 +57,12 @@ namespace MeaninglessServer
         {
             return LoadJsonFromFile<ServerConf>("/Configure/ServerConf.json");
         }
-
-        public static double NextDouble(Random random, double miniDouble, double maxiDouble)
+        
+        public static double NextDouble(Random random, double miniDouble, double maxDouble)
         {
             if (random != null)
             {
-                return random.NextDouble() * (maxiDouble - miniDouble) + miniDouble;
+                return random.NextDouble() * (maxDouble - miniDouble) + miniDouble;
             }
             else
             {

@@ -76,26 +76,6 @@ namespace MeaninglessServer
             return protocol;
         }
 
-        //读取地图块
-        public MaptileInfo GetMaptileInfo()
-        {
-            if (maptile == null)
-            {
-                maptile = new MaptileInfo();
-                maptile = Utility.LoadJsonFromFile<MaptileInfo>("/Configure/MaptileInfo.json");
-            }
-            return maptile;
-        }
-        //读取物品消息列表
-        public ItemsInfo GetItemsInfo()
-        {
-            if (itemsInfo == null)
-            {
-                itemsInfo = new ItemsInfo();
-                itemsInfo = Utility.LoadJsonFromFile<ItemsInfo>("/Configure/ItemsInfo.json");
-            }
-            return itemsInfo;
-        }
         //读取毒圈配置
         public CirclefieldInfo GetCirclefieldInfo()
         {
@@ -107,38 +87,5 @@ namespace MeaninglessServer
             return circlefieldInfo;
         }
 
-        /// <summary>
-        /// 返回一个获得所有物品的获得概率的数组
-        /// </summary>
-        /// <returns>所有物品获得概率的数组</returns>
-        public float[] GetTotalOccurrenceProbability()
-        {
-            GetItemsInfo();
-            if(itemsInfo!=null)
-            {
-                float[] tmp_float = new float[itemsInfo.ItemInfoList.Count];
-                for (int i = 0; i < itemsInfo.ItemInfoList.Count; i++)
-                {
-                    tmp_float[i] = itemsInfo.ItemInfoList[i].OP;
-                }
-                return tmp_float;
-            }
-
-            return null;
-        }
-        /// <summary>
-        /// 返回一个获得所有物品物品ID的数组
-        /// </summary>
-        /// <returns>所有物品物品ID的数组</returns>
-        public int[] GetAllItemsID()
-        {
-            int[] tmp_int = new int[itemsInfo.ItemInfoList.Count];
-            for (int i = 0; i < itemsInfo.ItemInfoList.Count; i++)
-            {
-                tmp_int[i] = itemsInfo.ItemInfoList[i].ItemID;
-            }
-            return tmp_int;
-
-        }
     }
 }
