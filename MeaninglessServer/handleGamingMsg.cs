@@ -27,7 +27,26 @@ namespace MeaninglessServer
             player.playerStatus.room.StartGame();
         }
 
+        /// <summary>
+        /// 获取房间玩家信息
+        /// </summary>
+        public void MsgGetPlayersInfo(Player player, BaseProtocol baseProtocol)
+        {
+            //消息结构: (string)GetPlayersInfo + (int)PlayerNum +(string)PlayerName1 + ... +(string)PlayerName#
+            int startIndex = 0;
+            BytesProtocol get = baseProtocol as BytesProtocol;
+            get.GetString(startIndex, ref startIndex);
+            Room room = player.playerStatus.room;
 
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("GetPlayersInfo");
+            p.SpliceInt(room.playerDict.Count);
+            foreach (Player pr in room.playerDict.Values)
+            {
+                p.SpliceString(pr.name);
+            }
+            player.Send(p);
+        }
         /// <summary>
         /// 获取地图物品数据
         /// </summary>
@@ -51,7 +70,6 @@ namespace MeaninglessServer
 
             //player.Send(player.playerStatus.room.ItemsProtocol);
         }
-
         /// <summary>
         /// 玩家加载完毕,定时器开始计时
         /// </summary>
@@ -97,6 +115,26 @@ namespace MeaninglessServer
 
             }
 
+        }
+        /// <summary>
+        /// 获取下落点
+        /// </summary>
+        public void MsgDroppoint(Player player, BaseProtocol baseProtocol)
+        {
+            int startIndex = 0;
+            BytesProtocol get = baseProtocol as BytesProtocol;
+            get.GetString(startIndex, ref startIndex);
+            Room room = player.playerStatus.room;
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("Droppoint");
+            Random rand = new Random();
+            lock (room.playerDroppoints)
+            {
+                int index = rand.Next(0, room.playerDroppoints.Count - 1);
+                room.playerDroppoints.RemoveAt(index);
+                p.SpliceInt(room.playerDroppoints[index]);
+            }
+            player.Send(p);
         }
 
         /// <summary>
@@ -316,21 +354,39 @@ namespace MeaninglessServer
             room.Broadcast(p_broadcast);
         }
 
-        ///// <summary>
-        ///// 玩家胜利
-        ///// </summary>
-        //public void MsgPlayerSuccess(Player player, BaseProtocol baseProtocol)
-        //{
-        //    //玩家胜利
-        //    //消息结构: (string)PlayerSuccess
+        /// <summary>
+        /// 玩家获得有害状态，转发
+        /// </summary>
+        public void MsgPlayerGetBuff(Player player, BaseProtocol baseProtocol)
+        {
+            //消息结构: (string)PlayerName + (int)BuffType +(float)buffTime 
+            int startIndex = 0;
+            BytesProtocol get = baseProtocol as BytesProtocol;
+            Room room = player.playerStatus.room;
+            get.GetString(startIndex, ref startIndex);
+            string PlayerName = get.GetString(startIndex, ref startIndex);
+            int bufftype = get.GetInt(startIndex, ref startIndex);
+            float bufftime = get.GetFloat(startIndex, ref startIndex);
+            if (room.playerDict.ContainsKey(PlayerName))
+            {
+                room.playerDict[PlayerName].playerStatus.buffType = bufftype;
+                room.playerDict[PlayerName].playerStatus.buffTime = bufftime;
+            }
 
-        //    Room room = player.playerStatus.room;
 
-        //    BytesProtocol p = new BytesProtocol();
 
-        //    RoomManager.instance.LeaveRoom(player);
-
-        //}
+            BytesProtocol p = new BytesProtocol();
+            p.SpliceString("PlayerGetBuff");
+            p.SpliceString(PlayerName);
+            p.SpliceInt(bufftype);
+            p.SpliceFloat(bufftime);
+            foreach (Player pr in room.playerDict.Values)
+            {
+                p.SpliceString(pr.name);
+            }
+            player.Send(p);
+        }
+  
 
         /// <summary>
         /// 房间门打开转发
@@ -371,49 +427,35 @@ namespace MeaninglessServer
             p.SpliceInt(GroundItemID);
             player.playerStatus.room.Broadcast(p);
         }
-
         /// <summary>
-        /// 获取房间玩家信息
+        /// 玩家扔物品
         /// </summary>
-        public void MsgGetPlayersInfo(Player player, BaseProtocol baseProtocol)
+        public void MsgDropItem(Player player, BaseProtocol baseProtocol)
         {
-            //消息结构: (string)GetPlayersInfo + (int)PlayerNum +(string)PlayerName1 + ... +(string)PlayerName#
+            //拾取物品
+            //消息结构: (string)PickItem + (int)GroundItemID
             int startIndex = 0;
-            BytesProtocol get = baseProtocol as BytesProtocol;
-            get.GetString(startIndex, ref startIndex);
-            Room room = player.playerStatus.room;
+            BytesProtocol p = baseProtocol as BytesProtocol;
+            p.GetString(startIndex, ref startIndex);
+            int GroundItemID = p.GetInt(startIndex, ref startIndex);
+            float posX = p.GetFloat(startIndex, ref startIndex);
+            float posY = p.GetFloat(startIndex, ref startIndex);
+            float posZ = p.GetFloat(startIndex, ref startIndex);
 
-            BytesProtocol p = new BytesProtocol();
-            p.SpliceString("GetPlayersInfo");
-            p.SpliceInt(room.playerDict.Count);
-            foreach (Player pr in room.playerDict.Values)
-            {
-                p.SpliceString(pr.name);
-            }
-            player.Send(p);
+            //转发魔法消息
+            BytesProtocol p_broadcast = new BytesProtocol();
+            p_broadcast.SpliceString("DropItem");
+            p_broadcast.SpliceInt(GroundItemID);
+            p_broadcast.SpliceFloat(posX);
+            p_broadcast.SpliceFloat(posY);
+            p_broadcast.SpliceFloat(posZ);
+            player.playerStatus.room.Broadcast(p);
         }
 
-        /// <summary>
-        /// 玩家获得有害状态，转发
-        /// </summary>
-        public void MsgPlayerGetBuff(Player player, BaseProtocol baseProtocol)
-        {
-            //消息结构: (string)PlayerName + (int)BuffType +(float)buffTime 
-            int startIndex = 0;
-            BytesProtocol get = baseProtocol as BytesProtocol;
-            Room room = player.playerStatus.room;
-            get.GetString(startIndex, ref startIndex);
-            string PlayerName = get.GetString(startIndex, ref startIndex);
-            int bufftype = get.GetInt(startIndex, ref startIndex);
-            float bufftime = get.GetFloat(startIndex, ref startIndex);
-            if (room.playerDict.ContainsKey(PlayerName))
-            {
-                room.playerDict[PlayerName].playerStatus.buffType = bufftype;
-                room.playerDict[PlayerName].playerStatus.buffTime = bufftime;
-            }
 
 
 
+<<<<<<< HEAD
             BytesProtocol p = new BytesProtocol();
             p.SpliceString("PlayerGetBuff");
             p.SpliceString(PlayerName);
@@ -422,6 +464,8 @@ namespace MeaninglessServer
             room.Broadcast(p);
         }
 
+=======
+>>>>>>> 3976aff33d9b12c11c80ab31dc0ab20e1a6d1a96
         /// <summary>
         /// 玩家戴头盔
         /// </summary>
@@ -477,47 +521,8 @@ namespace MeaninglessServer
             room.Broadcast(p);
         }
 
-        /// <summary>
-        /// 获取下落点
-        /// </summary>
-        public void MsgDroppoint(Player player, BaseProtocol baseProtocol)
-        {
-            int startIndex = 0;
-            BytesProtocol get = baseProtocol as BytesProtocol;
-            get.GetString(startIndex, ref startIndex);
-            Room room = player.playerStatus.room;
-            BytesProtocol p = new BytesProtocol();
-            p.SpliceString("Droppoint");
-            Random rand = new Random();
-            lock (room.playerDroppoints)
-            {
-                int index = rand.Next(0, room.playerDroppoints.Count - 1);
-                room.playerDroppoints.RemoveAt(index);
-                p.SpliceInt(room.playerDroppoints[index]);
-            }
-            player.Send(p);
-        }
 
-        public void MsgDropItem(Player player, BaseProtocol baseProtocol)
-        {
-            //拾取物品
-            //消息结构: (string)PickItem + (int)GroundItemID
-            int startIndex = 0;
-            BytesProtocol p = baseProtocol as BytesProtocol;
-            p.GetString(startIndex, ref startIndex);
-            int GroundItemID = p.GetInt(startIndex, ref startIndex);
-            float posX = p.GetFloat(startIndex, ref startIndex);
-            float posY = p.GetFloat(startIndex, ref startIndex);
-            float posZ = p.GetFloat(startIndex, ref startIndex);
 
-            //转发魔法消息
-            BytesProtocol p_broadcast = new BytesProtocol();
-            p_broadcast.SpliceString("DropItem");
-            p_broadcast.SpliceInt(GroundItemID);
-            p_broadcast.SpliceFloat(posX);
-            p_broadcast.SpliceFloat(posY);
-            p_broadcast.SpliceFloat(posZ);
-            player.playerStatus.room.Broadcast(p);
-        }
+
     }
 }

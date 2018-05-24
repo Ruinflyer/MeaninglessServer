@@ -43,7 +43,6 @@ namespace MeaninglessServer
         private bool Moving = false;
         private bool FirstRound = true;
         #endregion
-        /*********************************/
 
         /// <summary>
         /// 加入玩家
@@ -131,7 +130,16 @@ namespace MeaninglessServer
             timer.AutoReset = false;
             timer.Enabled = true;
         }
+        private void HandleTimer(object sender, ElapsedEventArgs e)
+        {
 
+            if (beginTimer)
+            {
+                CirclefieldTick();
+                timer.Start();
+            }
+
+        }
         /// <summary>
         /// 获取房间信息协议
         /// </summary>
@@ -160,20 +168,6 @@ namespace MeaninglessServer
             return protocol;
         }
 
-
-        public bool CanStart()
-        {
-            if (status != Status.Preparing)
-            {
-                return false;
-            }
-            if(playerDict.Count<2)
-            {
-                Console.WriteLine("");
-                return false;
-            }
-            return true;
-        }
 
         /// <summary>
         /// 开始战局
@@ -215,7 +209,6 @@ namespace MeaninglessServer
             Console.WriteLine("pointX:{0} pointY:{1} per:{2} mt{3}",point.X,point.Y, circlefieldInfo.Circlefields[circlefieldIndex].ShrinkPercent, circlefieldInfo.Circlefields[circlefieldIndex].Movetime);
             return p;
         }
-
         /// <summary>
         /// 毒圈协议-只随机一次中心点坐标
         /// </summary>
@@ -240,7 +233,6 @@ namespace MeaninglessServer
             Console.WriteLine("pointX:{0} pointY:{1} Shrinkper:{2} movetime{3} Round:{4}", lastPoint.X, lastPoint.Y, circlefieldInfo.Circlefields[circlefieldIndex].ShrinkPercent, circlefieldInfo.Circlefields[circlefieldIndex].Movetime,circlefieldIndex);
             return p;
         }
-
         public BytesProtocol CirclefieldTimeProtocol()
         {
             BytesProtocol p = new BytesProtocol();
@@ -287,16 +279,6 @@ namespace MeaninglessServer
             return newCenter;
         }
 
-        private void HandleTimer(object sender, ElapsedEventArgs e)
-        {
-            
-            if (beginTimer)
-            {
-                CirclefieldTick();
-                timer.Start();
-            }
-
-        }
         /// <summary>
         /// 毒圈计时处理
         /// </summary>
