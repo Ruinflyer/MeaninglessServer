@@ -19,7 +19,7 @@ namespace MeaninglessServer
         public void MsgHeartBeat(Player player, BaseProtocol baseProtocol)
         {
             player.connect.lastTick = Utility.GetTimeStamp();
-            Console.WriteLine("[更新心跳时间]" + player.connect.GetAdress());
+            Console.WriteLine("[更新心跳时间]" + player.connect.GetAddress());
         }
 
         

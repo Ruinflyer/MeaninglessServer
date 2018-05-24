@@ -43,7 +43,7 @@ namespace MeaninglessServer
             {
                 randomItemCode = ran.Next(1, 999);
             }
-            Console.WriteLine("RandomItemCode Set: " + randomItemCode.ToString());
+            //Console.WriteLine("RandomItemCode Set: " + randomItemCode.ToString());
             BytesProtocol p = new BytesProtocol();
             p.SpliceString("GetMapItemData");
             p.SpliceInt(randomItemCode);
@@ -65,17 +65,17 @@ namespace MeaninglessServer
             //int playerstatus = p.GetInt(startIndex, ref startIndex);
             Room room = player.playerStatus.room;
 
-            //测试单人使用
-            if (room.playerDict.Count == 1)
-            {
-                BytesProtocol protocol = new BytesProtocol();
-                protocol.SpliceString("AllPlayerLoaded");
-                room.Broadcast(protocol);
-                room.NewTimer();
-                room.beginTimer = true;
-                room.LastCirclefieldTime = Utility.GetTimeStamp();
-                return;
-            }
+            ////测试单人使用
+            //if (room.playerDict.Count == 1)
+            //{
+            //    BytesProtocol protocol = new BytesProtocol();
+            //    protocol.SpliceString("AllPlayerLoaded");
+            //    room.Broadcast(protocol);
+            //    room.NewTimer();
+            //    room.beginTimer = true;
+            //    room.LastCirclefieldTime = Utility.GetTimeStamp();
+            //    return;
+            //}
             if (room.playerReadyDict.Count < room.playerDict.Count)
             {
                 lock (room.playerReadyDict)
@@ -253,10 +253,10 @@ namespace MeaninglessServer
 
             //玩家魔法
             //消息结构: (string)PlayerMagic  + (string)magicName + (float)posX + (float)posY +(float)posZ+ (float)rotX + (float)rotY + (float)rotZ
-            if (player.playerStatus.status != PlayerStatus.Status.Gaming)
-            {
-                return;
-            }
+            //if (player.playerStatus.status != PlayerStatus.Status.Gaming)
+            //{
+            //    return;
+            //}
             Room room = player.playerStatus.room;
 
             int startIndex = 0;
@@ -419,11 +419,7 @@ namespace MeaninglessServer
             p.SpliceString(PlayerName);
             p.SpliceInt(bufftype);
             p.SpliceFloat(bufftime);
-            foreach (Player pr in room.playerDict.Values)
-            {
-                p.SpliceString(pr.name);
-            }
-            player.Send(p);
+            room.Broadcast(p);
         }
 
         /// <summary>

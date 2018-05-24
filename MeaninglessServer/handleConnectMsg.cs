@@ -18,7 +18,7 @@ namespace MeaninglessServer
         public void MsgHeartBeat(Connect connect,BaseProtocol baseProtocol)
         {
             connect.lastTick = Utility.GetTimeStamp();
-            Console.WriteLine("[更新心跳时间]" + connect.GetAdress());
+            Console.WriteLine("[更新心跳时间]" + connect.GetAddress());
         }
 
         public void MsgConnect(Connect connect, BaseProtocol Protocol)
@@ -27,7 +27,7 @@ namespace MeaninglessServer
             BytesProtocol bytesProtocol = (BytesProtocol)Protocol;
             string protocolName = bytesProtocol.GetString(startIndex, ref startIndex);
             string name = bytesProtocol.GetString(startIndex,ref startIndex);
-            Console.WriteLine("[客户端 " + connect.GetAdress() + " ](连接消息) 以用户名："+name+" 连接");
+            Console.WriteLine("[客户端 " + connect.GetAddress() + " ](连接消息) 以用户名："+name+" 连接");
             BytesProtocol bytesProtocolReturn = new BytesProtocol();
             bytesProtocolReturn.SpliceString("Connect");
             

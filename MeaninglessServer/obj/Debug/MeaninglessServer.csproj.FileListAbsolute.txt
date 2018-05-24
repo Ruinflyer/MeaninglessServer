@@ -19,7 +19,6 @@ C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\bin\Debug\Me
 C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\bin\Debug\Newtonsoft.Json.dll
 C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csprojResolveAssemblyReference.cache
 C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csproj.CoreCompileInputs.cache
-C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.csproj.CopyComplete
 C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.exe
 C:\Users\ruinf\Documents\GitHub\MeaninglessServer\MeaninglessServer\obj\Debug\MeaninglessServer.pdb
 D:\GitHub\MeaninglessServer\MeaninglessServer\MeaninglessServer\bin\Debug\MeaninglessServer.exe

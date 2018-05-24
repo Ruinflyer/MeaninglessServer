@@ -356,6 +356,7 @@ namespace MeaninglessServer
                 foreach (string winner in playerDict.Keys)
                 {
                     playerDict[winner].Send(win);
+                    RoomManager.instance.LeaveRoom(playerDict[winner]);
                 }
             }
         }
